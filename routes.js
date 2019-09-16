@@ -4,7 +4,7 @@ const router = Router();
 
 router.get("/events", (req, res) => {
   return req.context.db
-    .getAll(req.query.date, req.query.location, req.query.max)
+    .getAll(req.query.date, req.query.location, req.query.order, req.query.max)
     .then(data => {
       res.send({
         data

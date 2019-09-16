@@ -30,27 +30,34 @@ class DB {
     );
   }
 
-  getAll(date, location, max) {
+  getAll(date, location, order, max) {
     let sql = `SELECT * from event`;
     const params = [];
-
     if (date || location) {
       sql += " WHERE ";
 
-      if (date) {
-        sql += "date=? AND";
-        params.push(date);
+      if (date && isDate(date)) {
+        console.log("321");
+        sql += "date=?";
+        params.push(new Date(date).toISOString().substring(0, 10));
       }
       if (location) {
-        sql += "location LIKE ?";
+        sql += `${date && " AND"} location LIKE ?`;
         params.push(`%${location}%`);
       }
+    }
+
+    if (order === "location" || order === "date") {
+      sql += "ORDER BY ? ASC";
+      params.push(order);
     }
 
     if (max) {
       sql += " LIMIT ?";
       params.push(max);
     }
+
+    console.log(sql);
 
     return new Promise((resolve, reject) => {
       this.database.all(sql, params, (err, rows) => {
@@ -135,7 +142,9 @@ class DB {
 }
 
 function isDate(date) {
-  return new Date(date) !== "Invalid Date" && !isNaN(new Date(date));
+  return (
+    Boolean(date) && new Date(date) !== "Invalid Date" && !isNaN(new Date(date))
+  );
 }
 
 module.exports = DB;
