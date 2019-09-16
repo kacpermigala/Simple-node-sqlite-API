@@ -1,4 +1,3 @@
-const models = require("./models");
 const routes = require("./routes");
 const DB = require("./database.js");
 const express = require("express");

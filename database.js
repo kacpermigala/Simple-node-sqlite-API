@@ -43,7 +43,7 @@ class DB {
       }
       if (location) {
         sql += "location LIKE ?";
-        params.push(location);
+        params.push(`%${location}%`);
       }
     }
 
