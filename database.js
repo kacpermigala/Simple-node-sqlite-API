@@ -37,7 +37,6 @@ class DB {
       sql += " WHERE ";
 
       if (date && isDate(date)) {
-        console.log("321");
         sql += "date=?";
         params.push(new Date(date).toISOString().substring(0, 10));
       }
@@ -56,8 +55,6 @@ class DB {
       sql += " LIMIT ?";
       params.push(max);
     }
-
-    console.log(sql);
 
     return new Promise((resolve, reject) => {
       this.database.all(sql, params, (err, rows) => {
