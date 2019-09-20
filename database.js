@@ -106,18 +106,21 @@ class DB {
     const sql =
       "UPDATE event SET location = COALESCE(?,location), date = COALESCE(?,date) WHERE id = ?";
 
+    let date = isDate(event.date) ? new Date(event.date) : new Date();
+
     return new Promise((resolve, reject) => {
-      this.database.run(sql, [event.location, event.date, event.id], function(
-        err,
-        _
-      ) {
-        if (err) {
-          reject(err);
+      this.database.run(
+        sql,
+        [event.location, date.toISOString().substring(0, 10), event.id],
+        function(err, _) {
+          if (err) {
+            reject(err);
+          }
+          resolve({
+            data: event
+          });
         }
-        resolve({
-          data: event
-        });
-      });
+      );
     });
   }
 
